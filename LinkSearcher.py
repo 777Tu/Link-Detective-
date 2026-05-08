@@ -1,0 +1,34 @@
+def LinkSearcher(FHtml):
+    custHtml = " ".join(FHtml.split())
+    startZero: int = 0; FDDLinks: list = []
+
+    while True:
+        FBHttp = custHtml.find("http", startZero)
+        if FBHttp == -1:
+            break
+
+
+        FDTag = custHtml.find(">", FBHttp)
+        FDSpace = custHtml.find(" ", FBHttp)
+        FDDQuote = custHtml.find('"', FBHttp)
+        FDSQuote = custHtml.find("'", FBHttp)
+        FDBSlashe = custHtml.find("\\", FBHttp)
+        FDAnd = custHtml.find("&", FBHttp)
+
+
+        indices = [FDIdx for FDIdx in [FDTag, FDSpace, FDDQuote, FDSQuote, FDBSlashe, FDAnd] if FDIdx != -1]
+
+        if indices:
+            FDChar = min(indices)
+            FDDUrl = custHtml[FBHttp: FDChar]
+            startZero = FDChar + 1
+        else:
+            # If no end character is found, take the rest of the string
+            FDDUrl = custHtml[FBHttp:]
+            startZero = len(custHtml)
+
+
+        if FDDUrl.startswith("http://") or FDDUrl.startswith("https://"):
+            FDDLinks.append(FDDUrl)
+
+    return FDDLinks
